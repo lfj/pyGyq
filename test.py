@@ -2,6 +2,8 @@ import re;
 import json;
 
 def search(query, ordering = 'normal'):
+
+def searchByNormal(query):
     with open('recipes.json', 'r') as file:
         data = json.load(file)
     list = query.split()
@@ -34,6 +36,12 @@ def search(query, ordering = 'normal'):
         else:
             print('top' + str(i+1) + ":", searchResultList[i]['title'], searchResultList[i]['num'])
     print('-----------------------------------------------------------------')
+
+def searchBySimple(query):
+
+
+def searchByHealth(query):
+
 
 def getValueByKey(json, key):
     if key in json:
