@@ -17,9 +17,9 @@ def search(query, ordering = 'normal'):
         num = 0
         for word in list:
             titleNum = title.count(word)
-            categoriesNum = getValueByKey(index, 'categories').count(word)
-            ingredientsNum = getValueByKey(index, 'ingredients').count(word)
-            directionsNum = getValueByKey(index, 'directions').count(word)
+            categoriesNum = str(getValueByKey(index, 'categories')).lower().count(word.lower())
+            ingredientsNum = str(getValueByKey(index, 'ingredients')).lower().count(word.lower())
+            directionsNum = str(getValueByKey(index, 'directions')).lower().count(word.lower())
             num = num + titleNum + categoriesNum + ingredientsNum + directionsNum
         print(num)
         if 0 != num:
@@ -46,12 +46,19 @@ def insertNode(searchResultList, node):
         searchResultList.append(node)
     else:
         isInserted = False
-        for i in range(len(searchResultList)):
-            if searchResultList[i]['num'] < node['num']:
+        #for i in range(len(searchResultList)):
+        for i, val in enumerate(searchResultList):
+            #如果插入的title相同，认为是同一个菜单
+            if searchResultList[i]['title'].replace(' ', '') == node['title'].replace(' ', ''):
+                if node['num'] > searchResultList[i]['num']:
+                    searchResultList[i]['num'] = node['num']
+                    isInserted = True
+                    break
+            elif searchResultList[i]['num'] < node['num']:
                 searchResultList.insert(i, node)
                 isInserted = True
                 break
         if False == isInserted:
             searchResultList.append(node)
 
-search('Apple with', 'normal')
+search('apple pork', 'normal')
