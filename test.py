@@ -166,10 +166,6 @@ def insertNodeByMin(searchResultList, node):
 
             #如果插入的title相同，认为是同一个菜单
             if searchResultList[i]['title'].replace(' ', '') == node['title'].replace(' ', ''):
-                #if node['num'] < searchResultList[i]['num']:
-                #    searchResultList[i]['num'] = node['num']
-                #    isInserted = True
-                #    break
                 isInserted = True
                 break
             elif searchResultList[i]['num'] > node['num']:
@@ -189,10 +185,6 @@ def insertNodeByMax(searchResultList, node):
         for i, val in enumerate(searchResultList):
             #如果插入的title相同，认为是同一个菜单
             if searchResultList[i]['title'].replace(' ', '') == node['title'].replace(' ', ''):
-                #if node['num'] > searchResultList[i]['num']:
-                #    searchResultList[i]['num'] = node['num']
-                #    isInserted = True
-                #    break
                 isInserted = True
                 break
             elif searchResultList[i]['num'] < node['num']:
@@ -204,6 +196,6 @@ def insertNodeByMax(searchResultList, node):
 
 with open('recipes.json', 'r') as file:
     data = json.load(file)
-#search('apple pork', 'normal')
+search('apple pork', 'normal')
 #search('apple pork', 'simple')
-search('apple pork', 'healthy')
+#search('apple pork banana', 'healthy')
