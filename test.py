@@ -1,4 +1,3 @@
-import re;
 import json;
 
 def search(query, ordering = 'normal'):
@@ -12,20 +11,16 @@ def search(query, ordering = 'normal'):
 def searchByNormal(query):
     global data
     list = query.split()
-    print('用户输入的搜索字段=', list)
 
     searchResultList = []
     for index in data:
         if 'title' not in index:
             continue
-
         title = index['title']
-        ''' 单词出现的次数 '''
         rating = getValueByKey(index, 'rating')
-        if isDigit(rating):
+        if not isDigit(rating):
             rating = 0
         num = 0
-
         for word in list:
             titleNum = title.lower().count(word)
             categoriesNum = str(getValueByKey(index, 'categories')).lower().count(word.lower())
@@ -39,6 +34,7 @@ def searchByNormal(query):
             insertNodeByMax(searchResultList, result)
 
     print('searchResultList=', searchResultList)
+    print('用户输入的搜索字段=', list)
     print('排序方式是normal时的搜索结果如下')
     print('-----------------------------------------------------------------')
     for i in range(len(searchResultList)):
@@ -51,8 +47,6 @@ def searchByNormal(query):
 def searchBySimple(query):
     global data
     list = query.split()
-    print(list)
-
     searchResultList = []
     for index in data:
         if 'title' not in index:
@@ -64,10 +58,11 @@ def searchBySimple(query):
             if isListEmpty(directions) or isListEmpty(ingredients):
                 continue
             num = len(directions) * len(ingredients)
+            print(num)
             result = {'title': title, 'num': num}
             insertNodeByMin(searchResultList, result)
-
     print('searchResultList=', searchResultList)
+    print('用户输入的搜索字段=', list)
     print('排序方式是simple时的搜索结果如下')
     print('-----------------------------------------------------------------')
     for i in range(len(searchResultList)):
@@ -80,8 +75,6 @@ def searchBySimple(query):
 def searchByHealth(query):
     global data
     list = query.split()
-    print(list)
-
     searchResultList = []
     for index in data:
         if 'title' not in index:
@@ -91,6 +84,7 @@ def searchByHealth(query):
             categoriesNum = getValueByKey(index, 'calories')
             proteinNum = getValueByKey(index, 'protein')
             fatNum = getValueByKey(index, 'fat')
+            print(fatNum)
             #如果三个值都不是数字则放弃
             if (not isDigit(categoriesNum)) or (not isDigit(proteinNum)) or (not isDigit(fatNum)):
                 continue
@@ -99,6 +93,7 @@ def searchByHealth(query):
             insertNodeByMin(searchResultList, result)
     print('searchResultList=', searchResultList)
     print('排序方式是healthy时的搜索结果如下')
+    print('用户输入的搜索字段=', list)
     print('-----------------------------------------------------------------')
     for i in range(len(searchResultList)):
         if 10 == i:
@@ -166,12 +161,17 @@ def insertNodeByMin(searchResultList, node):
         isInserted = False
         #for i in range(len(searchResultList)):
         for i, val in enumerate(searchResultList):
+            if 'Ice Block ' == searchResultList[i]['title']:
+                print("相同相同相同相同")
+
             #如果插入的title相同，认为是同一个菜单
             if searchResultList[i]['title'].replace(' ', '') == node['title'].replace(' ', ''):
-                if node['num'] < searchResultList[i]['num']:
-                    searchResultList[i]['num'] = node['num']
-                    isInserted = True
-                    break
+                #if node['num'] < searchResultList[i]['num']:
+                #    searchResultList[i]['num'] = node['num']
+                #    isInserted = True
+                #    break
+                isInserted = True
+                break
             elif searchResultList[i]['num'] > node['num']:
                 searchResultList.insert(i, node)
                 isInserted = True
@@ -189,10 +189,12 @@ def insertNodeByMax(searchResultList, node):
         for i, val in enumerate(searchResultList):
             #如果插入的title相同，认为是同一个菜单
             if searchResultList[i]['title'].replace(' ', '') == node['title'].replace(' ', ''):
-                if node['num'] > searchResultList[i]['num']:
-                    searchResultList[i]['num'] = node['num']
-                    isInserted = True
-                    break
+                #if node['num'] > searchResultList[i]['num']:
+                #    searchResultList[i]['num'] = node['num']
+                #    isInserted = True
+                #    break
+                isInserted = True
+                break
             elif searchResultList[i]['num'] < node['num']:
                 searchResultList.insert(i, node)
                 isInserted = True
