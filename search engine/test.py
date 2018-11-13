@@ -196,6 +196,6 @@ def insertNodeByMax(searchResultList, node):
 
 with open('recipes.json', 'r') as file:
     data = json.load(file)
-search('apple pork', 'normal')
-#search('apple pork', 'simple')
+#search('apple pork', 'normal')
+search('apple pork', 'simple')
 #search('apple pork banana', 'healthy')
