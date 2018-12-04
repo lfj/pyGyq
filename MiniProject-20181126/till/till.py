@@ -10,8 +10,7 @@ Send a HEAD request::
 Send a POST request::
     curl -d "foo=bar&bin=baz" http://localhost
 """
-from BaseHTTPServer import BaseHTTPRequestHandler, HTTPServer
-import SocketServer
+from http.server import BaseHTTPRequestHandler, HTTPServer
 
 import base64
 
@@ -19,7 +18,7 @@ def build_action_refill(where,what):
     text = "<action>\n"
     text += "<type>refill</type>\n"
     text += "<where>"+where+"</where>\n"
-    text += "<what>"+base64.b64encode(what)+"</what>\n"
+    text += "<what>"+bytes.decode(base64.b64encode(str.encode(what)))+"</what>\n"
     text += "</action>\n"
     return text
 
@@ -27,7 +26,7 @@ def build_action_append(where,what):
     text = "<action>\n"
     text += "<type>append</type>\n"
     text += "<where>"+where+"</where>\n"
-    text += "<what>"+base64.b64encode(what)+"</what>\n"
+    text += "<what>"+bytes.decode(base64.b64encode(str.encode(what)))+"</what>\n"
     text += "</action>\n"
     return text
 
@@ -53,7 +52,7 @@ class S(BaseHTTPRequestHandler):
 
     def do_GET(self):
 
-        parts = self.path.split("?",1);        
+        parts = self.path.split("?",1);
 
         if (self.path == '/'):
             self.send_response(200)
@@ -102,7 +101,7 @@ class S(BaseHTTPRequestHandler):
             self.send_header('Content-type', 'text/html')
             
         self.end_headers()
-        self.wfile.write(text)
+        self.wfile.write(str.encode(text))
 
     def do_HEAD(self):
         self._set_headers()
@@ -112,9 +111,9 @@ class S(BaseHTTPRequestHandler):
         self.wfile.write("<html><body><h1>POST!</h1></body></html>")
         
 def run(server_class=HTTPServer, handler_class=S, port=80):
-    server_address = ('', port)
+    server_address = ('127.0.0.1', port)
     httpd = server_class(server_address, handler_class)
-    print 'Starting httpd...'
+    print('Starting httpd...')
     httpd.serve_forever()
 
 if __name__ == "__main__":
